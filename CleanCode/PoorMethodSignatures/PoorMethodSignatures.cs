@@ -9,7 +9,7 @@ namespace CleanCode.PoorMethodSignatures
         {
             var userService = new UserService();
 
-            var user = userService.GetUser("username", "password", true);
+            var user = userService.Login("username", "password");
             var anotherUser = userService.GetUser("username", null, false);
         }
     }
@@ -22,13 +22,7 @@ namespace CleanCode.PoorMethodSignatures
         {
             if (login)
             {
-                // Check if there is a user with the given username and password in db
-                // If yes, set the last login date 
-                // and then return the user. 
-                var user = _dbContext.Users.SingleOrDefault(u => u.Username == username && u.Password == password);
-                if (user != null)
-                    user.LastLogin = DateTime.Now;
-                return user;
+                return Login(username, password);
             }
             else
             {
@@ -37,6 +31,17 @@ namespace CleanCode.PoorMethodSignatures
                 var user = _dbContext.Users.SingleOrDefault(u => u.Username == username);
                 return user;
             }
+        }
+
+        public User Login(string username, string password)
+        {
+            // Check if there is a user with the given username and password in db
+            // If yes, set the last login date 
+            // and then return the user. 
+            var user = _dbContext.Users.SingleOrDefault(u => u.Username == username && u.Password == password);
+            if (user != null)
+                user.LastLogin = DateTime.Now;
+            return user;
         }
     }
 
