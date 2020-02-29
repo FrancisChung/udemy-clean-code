@@ -67,6 +67,8 @@
     <Compile Include="SwitchStatements\Customer.cs" />
     <Compile Include="SwitchStatements\MonthlyStatement.cs" />
     <Compile Include="SwitchStatements\MonthlyUsage.cs" />
+    <Compile Include="SwitchStatements\PayAsYouGoCustomer.cs" />
+    <Compile Include="SwitchStatements\UnlimitedCustomer.cs" />
     <Compile Include="Tuples\Tuples.cs" />
     <Compile Include="VariableDeclarationsAtTheTop\PayCalculator.cs" />
   </ItemGroup>

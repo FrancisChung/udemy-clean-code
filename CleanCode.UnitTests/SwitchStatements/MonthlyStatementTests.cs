@@ -9,7 +9,7 @@ namespace CleanCode.UnitTests.SwitchStatements
         [TestMethod]
         public void PayAsYouGoCustomer_IsChargedBasedOnTheSumOfCostOfCallAndSms()
         {
-            var customer = new Customer { Type = CustomerType.PayAsYouGo };
+            var customer = new PayAsYouGoCustomer();
             var usage = new MonthlyUsage { CallMinutes = 100, SmsCount = 100, Customer = customer };
             var statement = usage.Customer.GeneratesStatement(usage);
 
@@ -22,7 +22,7 @@ namespace CleanCode.UnitTests.SwitchStatements
         [TestMethod]
         public void UnlimitedCustomer_IsChargedAFlatRatePerMonth()
         {
-            var customer = new Customer { Type = CustomerType.Unlimited };
+            var customer = new UnlimitedCustomer();
             var usage = new MonthlyUsage { CallMinutes = 100, SmsCount = 100, Customer = customer };
             var statement = usage.Customer.GeneratesStatement(usage);
 
