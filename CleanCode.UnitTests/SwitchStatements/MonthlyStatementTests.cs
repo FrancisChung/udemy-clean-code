@@ -11,8 +11,8 @@ namespace CleanCode.UnitTests.SwitchStatements
         {
             var customer = new Customer { Type = CustomerType.PayAsYouGo };
             var usage = new MonthlyUsage { CallMinutes = 100, SmsCount = 100, Customer = customer };
-            var statement = new MonthlyStatement();
-            statement.Generate(usage);
+            var statement = usage.Customer.GeneratesStatement(usage);
+
 
             Assert.AreEqual(12.0f, statement.CallCost);
             Assert.AreEqual(12.0f, statement.SmsCost);
@@ -24,8 +24,7 @@ namespace CleanCode.UnitTests.SwitchStatements
         {
             var customer = new Customer { Type = CustomerType.Unlimited };
             var usage = new MonthlyUsage { CallMinutes = 100, SmsCount = 100, Customer = customer };
-            var statement = new MonthlyStatement();
-            statement.Generate(usage);
+            var statement = usage.Customer.GeneratesStatement(usage);
 
             Assert.AreEqual(0, statement.CallCost);
             Assert.AreEqual(0, statement.SmsCost);
