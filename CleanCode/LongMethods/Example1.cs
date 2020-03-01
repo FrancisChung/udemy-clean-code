@@ -11,32 +11,8 @@ using System.Data;
 
 namespace FooFoo
 {
-    public partial class Download : System.Web.UI.Page
+    public class MemoryFileCreator
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            System.IO.MemoryStream ms = CreateMemoryFile();
-
-            byte[] byteArray = ms.ToArray();
-            ms.Flush();
-            ms.Close();
-
-            Response.Clear();
-            Response.ClearContent();
-            Response.ClearHeaders();
-            Response.Cookies.Clear();
-            Response.Cache.SetCacheability(HttpCacheability.Private);
-            Response.CacheControl = "private";
-            Response.Charset = System.Text.UTF8Encoding.UTF8.WebName;
-            Response.ContentEncoding = System.Text.UTF8Encoding.UTF8;
-            Response.AppendHeader("Pragma", "cache");
-            Response.AppendHeader("Expires", "60");
-            Response.ContentType = "text/comma-separated-values";
-            Response.AddHeader("Content-Disposition", "attachment; filename=FooFoo.csv");
-            Response.AddHeader("Content-Length", byteArray.Length.ToString());
-            Response.BinaryWrite(byteArray);
-        }
-
         public System.IO.MemoryStream CreateMemoryFile()
         {
             MemoryStream ReturnStream = new MemoryStream();
@@ -100,6 +76,41 @@ namespace FooFoo
             }
             return ReturnStream;
         }
+    }
 
+    public partial class Download : System.Web.UI.Page
+    {
+        private readonly MemoryFileCreator _memoryFileCreator = new MemoryFileCreator();
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            System.IO.MemoryStream ms = _memoryFileCreator.CreateMemoryFile();
+
+            byte[] byteArray = ms.ToArray();
+            ms.Flush();
+            ms.Close();
+
+            ClearResponse();
+
+            Response.Cache.SetCacheability(HttpCacheability.Private);
+            Response.CacheControl = "private";
+            Response.AppendHeader("Pragma", "cache");
+            Response.AppendHeader("Expires", "60");
+
+            Response.Charset = System.Text.UTF8Encoding.UTF8.WebName;
+            Response.ContentEncoding = System.Text.UTF8Encoding.UTF8;
+            Response.ContentType = "text/comma-separated-values";
+            Response.AddHeader("Content-Disposition", "attachment; filename=FooFoo.csv");
+            Response.AddHeader("Content-Length", byteArray.Length.ToString());
+            Response.BinaryWrite(byteArray);
+        }
+
+        private void ClearResponse()
+        {
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.Cookies.Clear();
+        }
     }
 }
