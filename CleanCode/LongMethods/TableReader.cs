@@ -2,9 +2,9 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
-static internal class TableReader
+internal class TableReader
 {
-    private static DataTable GetDataTable()
+    public DataTable GetDataTable()
     {
         string strConn = ConfigurationManager.ConnectionStrings["FooFooConnectionString"].ToString();
         SqlConnection conn = new SqlConnection(strConn);
