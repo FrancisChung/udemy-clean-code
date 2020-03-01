@@ -92,17 +92,27 @@ namespace FooFoo
 
             ClearResponse();
 
-            Response.Cache.SetCacheability(HttpCacheability.Private);
-            Response.CacheControl = "private";
-            Response.AppendHeader("Pragma", "cache");
-            Response.AppendHeader("Expires", "60");
+            SetCacheability();
 
+            WriteContentToResponse(byteArray);
+        }
+
+        private void WriteContentToResponse(byte[] byteArray)
+        {
             Response.Charset = System.Text.UTF8Encoding.UTF8.WebName;
             Response.ContentEncoding = System.Text.UTF8Encoding.UTF8;
             Response.ContentType = "text/comma-separated-values";
             Response.AddHeader("Content-Disposition", "attachment; filename=FooFoo.csv");
             Response.AddHeader("Content-Length", byteArray.Length.ToString());
             Response.BinaryWrite(byteArray);
+        }
+
+        private void SetCacheability()
+        {
+            Response.Cache.SetCacheability(HttpCacheability.Private);
+            Response.CacheControl = "private";
+            Response.AppendHeader("Pragma", "cache");
+            Response.AppendHeader("Expires", "60");
         }
 
         private void ClearResponse()
