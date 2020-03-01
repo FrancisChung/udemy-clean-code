@@ -28,25 +28,38 @@ namespace FooFoo
         {
             foreach (DataRow dr in dt.Rows)
             {
-                for (int i = 0; i < dt.Columns.Count; i++)
-                {
-                    if (!Convert.IsDBNull(dr[i]))
-                    {
-                        string str = String.Format("\"{0:c}\"", dr[i].ToString()).Replace("\r\n", " ");
-                        sw.Write(str);
-                    }
-                    else
-                    {
-                        sw.Write("");
-                    }
-
-                    if (i < dt.Columns.Count - 1)
-                    {
-                        sw.Write(",");
-                    }
-                }
-
+                WriteRow(dt, dr, sw);
                 sw.WriteLine();
+            }
+        }
+
+        private static void WriteRow(DataTable dt, DataRow dr, StreamWriter sw)
+        {
+            for (int i = 0; i < dt.Columns.Count; i++)
+            {
+                WriteCell(dr, i, sw);
+                WriteSeperatorIfRequired(dt, i, sw);
+            }
+        }
+
+        private static void WriteSeperatorIfRequired(DataTable dt, int i, StreamWriter sw)
+        {
+            if (i < dt.Columns.Count - 1)
+            {
+                sw.Write(",");
+            }
+        }
+
+        private static void WriteCell(DataRow dr, int i, StreamWriter sw)
+        {
+            if (!Convert.IsDBNull(dr[i]))
+            {
+                string str = String.Format("\"{0:c}\"", dr[i].ToString()).Replace("\r\n", " ");
+                sw.Write(str);
+            }
+            else
+            {
+                sw.Write("");
             }
         }
 
