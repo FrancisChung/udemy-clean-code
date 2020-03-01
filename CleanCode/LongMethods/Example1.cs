@@ -7,18 +7,16 @@ using System.Data;
 
 namespace FooFoo
 {
-    public class MemoryFileCreator
+    public class DataTableToCSVMapper
     {
-        public System.IO.MemoryStream CreateMemoryFile()
+        public System.IO.MemoryStream Map(DataTable dataTable)
         {
             MemoryStream ReturnStream = new MemoryStream();
 
-            var dt = GetDataTable();
-
             StreamWriter sw = new StreamWriter(ReturnStream);
 
-            WriteColumnNames(dt, sw);
-            WriteRows(dt, sw);
+            WriteColumnNames(dataTable, sw);
+            WriteRows(dataTable, sw);
 
             sw.Flush();
             sw.Close();
@@ -65,22 +63,12 @@ namespace FooFoo
             sw.WriteLine();
 
         }
-
-        private static DataTable GetDataTable()
-        {
-            string strConn = ConfigurationManager.ConnectionStrings["FooFooConnectionString"].ToString();
-            SqlConnection conn = new SqlConnection(strConn);
-            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM [FooFoo] ORDER BY id ASC", conn);
-            DataSet ds = new DataSet();
-            da.Fill(ds, "FooFoo");
-            DataTable dt = ds.Tables["FooFoo"];
-            return dt;
-        }
     }
 
     public partial class Download : System.Web.UI.Page
     {
-        private readonly MemoryFileCreator _memoryFileCreator = new MemoryFileCreator();
+        private readonly DataTableToCSVMapper _dataTableToCsvMapper = new DataTableToCSVMapper();
+        private readonly TableReader _tableReader = new TableReader();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -93,7 +81,7 @@ namespace FooFoo
 
         private byte[] GetCSV()
         {
-            System.IO.MemoryStream ms = _memoryFileCreator.CreateMemoryFile();
+            System.IO.MemoryStream ms = _dataTableToCsvMapper.Map(_tableReader.GetDataTable());
             byte[] byteArray = ms.ToArray();
             ms.Flush();
             ms.Close();
