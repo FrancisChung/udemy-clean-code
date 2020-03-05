@@ -9,12 +9,13 @@ namespace Project.UserControls
 {
     public class PostControl : System.Web.UI.UserControl
     {
-        private readonly PostDbContext _dbContext;
+        private readonly PostRepository _postRepository;
 
         public PostControl()
         {
-            _dbContext = new PostDbContext();
+            _postRepository = new PostRepository();
         }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Page.IsPostBack)
@@ -26,15 +27,9 @@ namespace Project.UserControls
         private void DisplayPost()
         {
             int postId = Convert.ToInt32(Request.QueryString["id"]);
-            var entity = GetPost(postId);
+            var entity = _postRepository.GetPost(postId);
             PostBody.Text = entity.Body;
             PostTitle.Text = entity.Title;
-        }
-
-        private Post GetPost(int postId)
-        {
-            Post entity = _dbContext.Posts.SingleOrDefault(p => p.Id == postId);
-            return entity;
         }
 
         private void TrySavePost()
@@ -51,7 +46,7 @@ namespace Project.UserControls
 
             if (results.IsValid)
             {
-                SavePost(entity);
+                _postRepository.SavePost(entity);
             }
             else
             {
@@ -72,13 +67,6 @@ namespace Project.UserControls
                     }
                 }
             }
-        }
-
-        private void SavePost(Post post)
-        {
-            // Save to the database and continue to the next page
-            _dbContext.Posts.Add(post);
-            _dbContext.SaveChanges();
         }
 
         public Label PostBody { get; set; }

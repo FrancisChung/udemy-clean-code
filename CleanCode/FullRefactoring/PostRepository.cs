@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace CleanCode.FullRefactoring
+namespace Project.UserControls
 {
     public class PostRepository
     {
@@ -13,14 +13,15 @@ namespace CleanCode.FullRefactoring
 
         public Post GetPost(int postId)
         {
-            return _dbContext.Posts.SingleOrDefault(p => p.Id == postId);
+            Post entity = _dbContext.Posts.SingleOrDefault(p => p.Id == postId);
+            return entity;
         }
 
         public void SavePost(Post post)
         {
+            // Save to the database and continue to the next page
             _dbContext.Posts.Add(post);
             _dbContext.SaveChanges();
         }
     }
 }
-

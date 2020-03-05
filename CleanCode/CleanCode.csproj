@@ -53,6 +53,7 @@
     <Compile Include="FullRefactoring\Example1.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="FullRefactoring\PostRepository.cs" />
     <Compile Include="LongMethods\Example1.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
