@@ -1,14 +1,12 @@
 ﻿
+using System;
+
 namespace CleanCode.SwitchStatements
 {
-    public class Customer
+    public abstract class Customer
     {
-        public CustomerType Type { get; set; }
+
+        public abstract MonthlyStatement GeneratesStatement(MonthlyUsage monthlyUsage);
     }
 
-    public enum CustomerType
-    {
-        PayAsYouGo = 1,
-        Unlimited
-    }
 }

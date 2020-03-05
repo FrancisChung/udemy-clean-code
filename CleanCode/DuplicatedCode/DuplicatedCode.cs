@@ -1,37 +1,58 @@
 ﻿
 using System;
+using System.Security.AccessControl;
+using System.Web.UI.WebControls;
 
 namespace CleanCode.DuplicatedCode
 {
     class DuplicatedCode
     {
+        public class Time
+        {
+
+            public int Hours { get; private set; }
+            public int Minutes { get; private set; }
+
+            public Time(int hours, int minutes)
+            {
+                Hours = hours;
+                Minutes = minutes;
+            }
+
+            public static Time Parse(string stringDateTime)
+            {
+                int time;
+
+                if (!String.IsNullOrWhiteSpace(stringDateTime))
+                {
+                    if (Int32.TryParse(stringDateTime.Replace(":", ""), out time))
+                    {
+                        var hours = time / 100;
+                        var minutes = time % 100;
+
+                        return new Time(hours, minutes);
+                    }
+                    else
+                    {
+                        throw new ArgumentException("stringDateTime");
+                    }
+                }
+                else
+                    throw new ArgumentNullException("stringDateTime");
+            }
+        }
+
+
         public void AdmitGuest(string name, string admissionDateTime)
         {
             // Some logic 
             // ...
 
-            int time;
-            int hours = 0;
-            int minutes = 0;
-            if (!string.IsNullOrWhiteSpace(admissionDateTime))
-            {
-                if (int.TryParse(admissionDateTime.Replace(":", ""), out time))
-                {
-                    hours = time / 100;
-                    minutes = time % 100;
-                }
-                else
-                {
-                    throw new ArgumentException("admissionDateTime");
-                }
-
-            }
-            else
-                throw new ArgumentNullException("admissionDateTime");
+            var time = Time.Parse(admissionDateTime);
 
             // Some more logic 
             // ...
-            if (hours < 10)
+            if  (time.Hours < 10)
             {
 
             }
@@ -42,27 +63,11 @@ namespace CleanCode.DuplicatedCode
             // Some logic 
             // ...
 
-            int time;
-            int hours = 0;
-            int minutes = 0;
-            if (!string.IsNullOrWhiteSpace(admissionDateTime))
-            {
-                if (int.TryParse(admissionDateTime.Replace(":", ""), out time))
-                {
-                    hours = time / 100;
-                    minutes = time % 100;
-                }
-                else
-                {
-                    throw new ArgumentException("admissionDateTime");
-                }
-            }
-            else
-                throw new ArgumentNullException("admissionDateTime");
+           var time = Time.Parse(admissionDateTime);
 
             // Some more logic 
             // ...
-            if (hours < 10)
+            if (time.Hours < 10)
             {
 
             }
