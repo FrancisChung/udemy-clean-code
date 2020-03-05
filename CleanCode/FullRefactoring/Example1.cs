@@ -25,9 +25,16 @@ namespace Project.UserControls
 
         private void DisplayPost()
         {
-            Post entity = _dbContext.Posts.SingleOrDefault(p => p.Id == Convert.ToInt32(Request.QueryString["id"]));
+            int postId = Convert.ToInt32(Request.QueryString["id"]);
+            var entity = GetPost(postId);
             PostBody.Text = entity.Body;
             PostTitle.Text = entity.Title;
+        }
+
+        private Post GetPost(int postId)
+        {
+            Post entity = _dbContext.Posts.SingleOrDefault(p => p.Id == postId);
+            return entity;
         }
 
         private void TrySavePost()
@@ -44,9 +51,7 @@ namespace Project.UserControls
 
             if (results.IsValid)
             {
-                // Save to the database and continue to the next page
-                _dbContext.Posts.Add(entity);
-                _dbContext.SaveChanges();
+                SavePost(entity);
             }
             else
             {
@@ -67,6 +72,13 @@ namespace Project.UserControls
                     }
                 }
             }
+        }
+
+        private void SavePost(Post post)
+        {
+            // Save to the database and continue to the next page
+            _dbContext.Posts.Add(post);
+            _dbContext.SaveChanges();
         }
 
         public Label PostBody { get; set; }
