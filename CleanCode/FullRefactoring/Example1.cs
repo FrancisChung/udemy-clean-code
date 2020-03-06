@@ -36,25 +36,23 @@ namespace Project.UserControls
 
         private void TrySavePost()
         {
-            var entity = GetPost();
-            var results = _validator.Validate(entity);
+            var post = GetPost();
+            var results = _validator.Validate(post);
 
             if (results.IsValid)
-                _postRepository.SavePost(entity);
+                _postRepository.SavePost(post);
             else
                 DisplayErrors(results);
         }
 
         private Post GetPost()
         {
-            Post entity = new Post()
+            return new Post()
             {
-                // Map form fields to entity properties
                 Id = Convert.ToInt32(PostId.Value),
                 Title = PostTitle.Text.Trim(),
                 Body = PostBody.Text.Trim()
             };
-            return entity;
         }
 
         private void DisplayErrors(ValidationResult results)
