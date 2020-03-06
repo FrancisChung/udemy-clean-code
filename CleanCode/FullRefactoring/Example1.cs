@@ -10,10 +10,12 @@ namespace Project.UserControls
     public class PostControl : System.Web.UI.UserControl
     {
         private readonly PostRepository _postRepository;
+        private readonly PostValidator _validator;
 
         public PostControl()
         {
             _postRepository = new PostRepository();
+            _validator = new PostValidator();
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -34,9 +36,8 @@ namespace Project.UserControls
 
         private void TrySavePost()
         {
-            var validator = new PostValidator();
             var entity = GetPost();
-            var results = validator.Validate(entity);
+            var results = _validator.Validate(entity);
 
             if (results.IsValid)
                 _postRepository.SavePost(entity);
