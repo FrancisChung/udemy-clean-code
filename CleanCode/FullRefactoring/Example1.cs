@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web.UI.WebControls;
 
-namespace Project.UserControls
+namespace CleanCode.FullRefactoring
 {
     public class PostControl : System.Web.UI.UserControl
     {
