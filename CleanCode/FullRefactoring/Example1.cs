@@ -27,9 +27,9 @@ namespace Project.UserControls
         private void DisplayPost()
         {
             int postId = Convert.ToInt32(Request.QueryString["id"]);
-            var entity = _postRepository.GetPost(postId);
-            PostBody.Text = entity.Body;
-            PostTitle.Text = entity.Title;
+            var post = _postRepository.GetPost(postId);
+            PostBody.Text = post.Body;
+            PostTitle.Text = post.Title;
         }
 
         private void TrySavePost()
