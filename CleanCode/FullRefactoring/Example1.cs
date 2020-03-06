@@ -57,22 +57,30 @@ namespace Project.UserControls
 
         private void DisplayErrors(ValidationResult results)
         {
-            BulletedList summary = (BulletedList) FindControl("ErrorSummary");
+            var summary = GetErrorSummaryControl();
 
             // Display errors to the user
-            foreach (var failure in results.Errors)
+            foreach (var error in results.Errors)
             {
-                Label errorMessage = FindControl(failure.PropertyName + "Error") as Label;
+                var label = GetErrorLabel(error);
 
-                if (errorMessage == null)
-                {
-                    summary.Items.Add(new ListItem(failure.ErrorMessage));
-                }
+                if (label == null)
+                    summary.Items.Add(new ListItem(error.ErrorMessage));
                 else
-                {
-                    errorMessage.Text = failure.ErrorMessage;
-                }
+                    label.Text = error.ErrorMessage;
             }
+        }
+
+        private Label GetErrorLabel(ValidationError error)
+        {
+            var errorLabel = FindControl(error.PropertyName + "Error") as Label;
+            return errorLabel;
+        }
+
+        private BulletedList GetErrorSummaryControl()
+        {
+            var errorSummary = (BulletedList) FindControl("ErrorSummary");
+            return errorSummary;
         }
 
         public Label PostBody { get; set; }
