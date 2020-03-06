@@ -34,7 +34,18 @@ namespace Project.UserControls
 
         private void TrySavePost()
         {
-            PostValidator validator = new PostValidator();
+            var validator = new PostValidator();
+            var entity = GetPost();
+            var results = validator.Validate(entity);
+
+            if (results.IsValid)
+                _postRepository.SavePost(entity);
+            else
+                DisplayErrors(results);
+        }
+
+        private Post GetPost()
+        {
             Post entity = new Post()
             {
                 // Map form fields to entity properties
@@ -42,29 +53,25 @@ namespace Project.UserControls
                 Title = PostTitle.Text.Trim(),
                 Body = PostBody.Text.Trim()
             };
-            ValidationResult results = validator.Validate(entity);
+            return entity;
+        }
 
-            if (results.IsValid)
-            {
-                _postRepository.SavePost(entity);
-            }
-            else
-            {
-                BulletedList summary = (BulletedList) FindControl("ErrorSummary");
+        private void DisplayErrors(ValidationResult results)
+        {
+            BulletedList summary = (BulletedList) FindControl("ErrorSummary");
 
-                // Display errors to the user
-                foreach (var failure in results.Errors)
+            // Display errors to the user
+            foreach (var failure in results.Errors)
+            {
+                Label errorMessage = FindControl(failure.PropertyName + "Error") as Label;
+
+                if (errorMessage == null)
                 {
-                    Label errorMessage = FindControl(failure.PropertyName + "Error") as Label;
-
-                    if (errorMessage == null)
-                    {
-                        summary.Items.Add(new ListItem(failure.ErrorMessage));
-                    }
-                    else
-                    {
-                        errorMessage.Text = failure.ErrorMessage;
-                    }
+                    summary.Items.Add(new ListItem(failure.ErrorMessage));
+                }
+                else
+                {
+                    errorMessage.Text = failure.ErrorMessage;
                 }
             }
         }
