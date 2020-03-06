@@ -13,8 +13,7 @@ namespace CleanCode.FullRefactoring
 
         public Post GetPost(int postId)
         {
-            Post entity = _dbContext.Posts.SingleOrDefault(p => p.Id == postId);
-            return entity;
+            return _dbContext.Posts.SingleOrDefault(p => p.Id == postId);
         }
 
         public void SavePost(Post post)
