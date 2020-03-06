@@ -12,6 +12,11 @@ namespace Project.UserControls
         private readonly PostRepository _postRepository;
         private readonly PostValidator _validator;
 
+        private Label PostBody { get; set; }
+        private Label PostTitle { get; set; }
+        private int? PostId { get; set; }
+
+
         public PostControl()
         {
             _postRepository = new PostRepository();
@@ -24,14 +29,6 @@ namespace Project.UserControls
                 TrySavePost();
             else
                 DisplayPost();
-        }
-
-        private void DisplayPost()
-        {
-            int postId = Convert.ToInt32(Request.QueryString["id"]);
-            var post = _postRepository.GetPost(postId);
-            PostBody.Text = post.Body;
-            PostTitle.Text = post.Title;
         }
 
         private void TrySavePost()
@@ -71,23 +68,25 @@ namespace Project.UserControls
             }
         }
 
-        private Label GetErrorLabel(ValidationError error)
-        {
-            var errorLabel = FindControl(error.PropertyName + "Error") as Label;
-            return errorLabel;
-        }
-
         private BulletedList GetErrorSummaryControl()
         {
             var errorSummary = (BulletedList) FindControl("ErrorSummary");
             return errorSummary;
         }
 
-        public Label PostBody { get; set; }
+        private Label GetErrorLabel(ValidationError error)
+        {
+            var errorLabel = FindControl(error.PropertyName + "Error") as Label;
+            return errorLabel;
+        }
 
-        public Label PostTitle { get; set; }
-
-        public int? PostId { get; set; }
+        private void DisplayPost()
+        {
+            int postId = Convert.ToInt32(Request.QueryString["id"]);
+            var post = _postRepository.GetPost(postId);
+            PostBody.Text = post.Body;
+            PostTitle.Text = post.Title;
+        }
     }
 
     #region helpers
